@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: catalog-service
+
+server:
+  port: 9001
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    treads:
+      max: 50 #Default is 200 which is much better for production but in local use a lot of computing resources
+      min: 5  #Defaul is 10 which is also better in production but here not
+
+
