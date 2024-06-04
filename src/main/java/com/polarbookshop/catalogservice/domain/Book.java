@@ -20,4 +20,4 @@ public record Book(
         @NotNull(message = "Price must not be omitted!")
         @Positive(message = "Price must be greater than zero!")
         Double price
-) {}
+)  { }
