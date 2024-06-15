@@ -1,6 +1,19 @@
 spring:
   application:
     name: catalog-service
+  config:
+    import: "optional:configserver:" #IN PRODUCTION this optional should not be present, only "configserver:"
+  cloud:
+    config:
+      uri: http://localhost:8888
+      request-connect-timeout: 5000 #Timeout on waiting to connect to the config server
+      request-read-timeout: 5000 #Timeout on waiting to read configuration data from the config server
+      fail-fast: true #If the connection to config server isn't succeed the fail will be fatal
+      retry:
+        max-attempts: 6 #Maximum number of attempts
+        initial-interval: 1000 #Initial retry interval for backoff
+        max-interval: 2000 #Maximum retry interval for backoff
+        multiplier: 1.1 #Multiplier to compute the next interval
 
 server:
   port: 9001
@@ -10,5 +23,14 @@ server:
     treads:
       max: 50 #Default is 200 which is much better for production but in local use a lot of computing resources
       min: 5  #Defaul is 10 which is also better in production but here not
+
+polar:
+  greeting: "Welkome to the local book catalog!"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh #Exposes the /actuator/refresh endpoint through HTTP
 
 
