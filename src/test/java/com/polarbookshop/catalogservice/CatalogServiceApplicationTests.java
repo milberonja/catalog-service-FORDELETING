@@ -1,14 +1,29 @@
 package com.polarbookshop.catalogservice;
 
+import com.polarbookshop.catalogservice.config.DataConfig;
 import com.polarbookshop.catalogservice.domain.Book;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("integration") //Enables the "integration" profile to load the configuration from application-integration.yml
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CatalogServiceApplicationTests {
 
 	@Test
@@ -18,9 +33,10 @@ class CatalogServiceApplicationTests {
     @Autowired
     WebTestClient webTestClient;
 
+
     @Test
     public void whenPostRequestThenBookCreated(){
-        Book bookToSave = new Book("0123456789", "Title", "Author", 9.90);
+        Book bookToSave = Book.of("0123456789", "Title", "Author", 9.90);
         webTestClient
                 .post()
                 .uri("/books")
@@ -33,6 +49,8 @@ class CatalogServiceApplicationTests {
 //                    assertThat(bookAfterSaving.isbn()).isEqualTo(bookAfterSaving.isbn());
 //                });
     }
+
+
 
 //    @Test
 //    void whenGetRequestWithIdThenBookReturned() {

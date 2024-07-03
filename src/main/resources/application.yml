@@ -14,6 +14,20 @@ spring:
         initial-interval: 1000 #Initial retry interval for backoff
         max-interval: 2000 #Maximum retry interval for backoff
         multiplier: 1.1 #Multiplier to compute the next interval
+  datasource:
+    username: user
+    password: password
+    url: jdbc:postgresql://localhost:5432/polardb_catalog
+    hikari:
+      connection-timeout: 2000 #Maximum time (ms) to spend waiting to get a connection from the pool
+      maximum-pool-size: 5 #Maximum number of connections HikariCP will keep in the pool
+  #When using Flyway previous database should be clean, the best way is to remove database container and create new one again after adding Flyway
+  #For example: docker rm -fv polar-postgres and then docker run -d --name polar-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=polardb_catalog -p 5432:5432 postgres:16.3
+
+# We are turning of sql.init.mode because we are going to use Flyway as a version controlled tool for managing database
+#  sql: #In case of using in-memory database, like H2, this code would be sufficient and Spring would find schema.sql
+#    init: # in src/resources as it is its location by default
+#      mode: always #However in case of using some database vendor, like PostgreSQL, we should write it here explicitly
 
 server:
   port: 9001
@@ -25,7 +39,7 @@ server:
       min: 5  #Defaul is 10 which is also better in production but here not
 
 polar:
-  greeting: "Welkome to the local book catalog!"
+  greeting: "Welcome to the local book catalog!"
 
 management:
   endpoints:
