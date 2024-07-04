@@ -17,7 +17,7 @@ public class BookJsonTest {
 
     @Test
     public void serializeTest() throws IOException {
-        Book book = Book.of("0123456789", "Author", "Title", 9.90);
+        Book book = Book.of("0123456789", "Author", "Title", 9.90, "Polarsophia");
         var serializedBook = jacksonTester.write(book);
         assertThat(serializedBook).extractingJsonPathStringValue("@.isbn").isEqualTo(book.isbn());
         assertThat(serializedBook).extractingJsonPathStringValue("@.author").isEqualTo(book.author());
@@ -32,9 +32,10 @@ public class BookJsonTest {
                     "isbn":"0123456789",
                     "title":"Title",
                     "author":"Author",
-                    "price":9.90
+                    "price":9.90,
+                    "publisher": "Polarsophia"
                 }
                 """;
-        assertThat(jacksonTester.parse(jsonContent)).isEqualTo(Book.of("0123456789", "Title", "Author", 9.90));
+        assertThat(jacksonTester.parse(jsonContent)).isEqualTo(Book.of("0123456789", "Title", "Author", 9.90, "Polarsophia"));
     }
 }
